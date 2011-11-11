@@ -4,7 +4,7 @@
 <% end %>
 <span id="attachments_fields">
 <%= file_field_tag 'attachments[1][file]', :size => 30, :id => nil  -%>
-<%= text_field_tag 'attachments[1][description]', '', :size => 30, :id => nil %>
+<%= text_field_tag 'attachments[1][description]', '', :title => "Attachment Description", :size => 30, :id => nil %>
 <em><%= l(:label_optional_description) %></em>
 </span>
 <br />
@@ -25,7 +25,7 @@
 <% end %>
 <span id="attach_applet" style="display: none; position: fixed; top: 50px; left: 10px; border: solid 1px #BBB;"></span>
 <span id="screenshots_fields">
-<%= submit_tag l(:button_add), :onclick => 'showAttachScreen(); return false;'%>
+<%= submit_tag l(:button_add), :type => 'button', :value => 'Attach Screenshot', :onclick => 'showAttachScreen(); return false;'%>
 </span>
 <small><%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>
 </small>
@@ -63,17 +63,27 @@
         im.src = "<%= url_for(:only_path => false, :controller => 'welcome')%>attach_screenshot?id=" + fileId;
 
         var b = document.createElement("input");
+	b.title = "Delete Attachment";
         b.type = "image";
         b.src = "/images/delete.png"
         b.setAttribute("onClick", "deleteAttachScreen('" + fileId + "'); return false;");
 
+/*
+	Commenting out this lighting bolt, it is confusing to end users:
+	There is already a Submit button at the bottom of the screen; there is no reason to duplicate this
+	functionality with another unlabeled, unclearly-purposed button. 
+	If someone wants to put this back in, please add a comment explaining why you find it helpful/useful, and/or
+	add a Title attribute so at least on mouseover a user can understand what it does.
+*/
+/*
 	var i = document.createElement("input");
 	i.type = "image";
 	i.src = "/images/lightning.png";
 	i.setAttribute("onClick", "InsertAttachScreen('" + fileId + "'); return false;");
-
+*/
         var d = document.createElement("input");
         d.name = "screenshots[" + fileId + "][description]";
+	d.title = "Attachment Description";
         d.type = "text";
         d.size = 15;
 
@@ -81,7 +91,7 @@
         s.appendChild(s1);
         s2.appendChild(d);
         s2.appendChild(b);
-        s2.appendChild(i);
+//        s2.appendChild(i);
         s.appendChild(s2);
 
         p = document.getElementById("screenshots");
